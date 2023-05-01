@@ -16,17 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
+"use strict";
 
-goog.provide('Blockly.Arduino.event');
+goog.provide("Blockly.Arduino.event");
 
-goog.require('Blockly.Arduino');
+goog.require("Blockly.Arduino");
 
-
-Blockly.Arduino['event_whenarduinobegin'] = function() {
-  Blockly.Arduino.includes_["arduino"] = "#include <Arduino.h>";
+Blockly.Arduino["event_whenarduinobegin"] = function () {
+  //Blockly.Arduino.includes_["arduino"] = "#include <Arduino.h>";
 
   var code = "";
   return code;
 };
-
