@@ -91,6 +91,13 @@ Blockly.Python["microbit_display_showImage"] = function (block) {
   return code;
 };
 
+Blockly.Python["microbit_display_showArrow"] = function (block) {
+  var arg0 = block.getFieldValue("ARROW");
+
+  var code = "display.show(Image('" + arg0 + "'))\n";
+  return code;
+};
+
 Blockly.Python["microbit_display_showImageUntil"] = function (block) {
   var arg0 =
     Blockly.Python.valueToCode(block, "VALUE", Blockly.Python.ORDER_ATOMIC) ||
@@ -259,6 +266,21 @@ Blockly.Python["microbit_wireless_openWirelessCommunication"] = function () {
   return code;
 };
 
+Blockly.Python["microbit_wireless_setWirelessCommunicationGroup"] = function (
+  block
+) {
+  Blockly.Python.imports_["radio"] = "import radio";
+
+  var group =
+    Blockly.Python.valueToCode(
+      block,
+      "GROUP",
+      Blockly.Python.ORDER_FUNCTION_CALL
+    ) || "";
+  var code = "radio.config(group = " + group + ")\n";
+  return code;
+};
+
 Blockly.Python["microbit_wireless_closeWirelessCommunication"] = function () {
   Blockly.Python.imports_["radio"] = "import radio";
   var code = "radio.off()\n";
@@ -300,6 +322,15 @@ Blockly.Python["microbit_wireless_setWirelessCommunicationChannel"] = function (
   return code;
 };
 
+Blockly.Python["microbit_wireless_whenReceiveWirelessMessage"] = function (
+  block
+) {
+  Blockly.Python.imports_["radio"] = "import radio";
+  var stack = Blockly.Python.statementToCode(block, "SUBSTACK");
+  var code = `while True:\n msg = radio.receive()\n  if msg:\n   ${stack}\n`;
+
+  return code;
+};
 Blockly.Python["microbit_console_consolePrint"] = function (block) {
   var msg =
     Blockly.Python.valueToCode(
@@ -317,5 +348,70 @@ Blockly.Python["microbit_music_playTone"] = function (block) {
   var beats = block.getFieldValue("BEATS");
   // var code = "pin" + pin + ".write_analog(" + out + ")\n";
   var code = "music.pitch(int(" + chords + "), int(" + beats + "))\n";
+  return code;
+};
+
+Blockly.Python["microbit_music_setVolume"] = function (block) {
+  Blockly.Python.imports_["music"] = "import music";
+  var volume =
+    Blockly.Python.valueToCode(
+      block,
+      "VOL",
+      Blockly.Python.ORDER_FUNCTION_CALL
+    ) || "";
+  var code = "music.set_volume(" + volume + ")\n";
+  return code;
+};
+
+Blockly.Python["microbit_music_setTempo"] = function (block) {
+  Blockly.Python.imports_["music"] = "import music";
+  var tempo =
+    Blockly.Python.valueToCode(
+      block,
+      "TEMPO",
+      Blockly.Python.ORDER_FUNCTION_CALL
+    ) || "";
+  var code = "music.tempo(bpm=" + tempo + ")\n";
+  return code;
+};
+
+Blockly.Python["microbit_music_playMelody"] = function (block) {
+  Blockly.Python.imports_["music"] = "import music";
+  var melody = block.getFieldValue("MELODY");
+  var code = "music.play(music." + melody + ")\n";
+  return code;
+};
+
+Blockly.Python["microbit_array_setArray"] = function (block) {
+  var name =
+    Blockly.Python.valueToCode(
+      block,
+      "VAR",
+      Blockly.Python.ORDER_FUNCTION_CALL
+    ) || "".replaceAll("'", "");
+  var value =
+    Blockly.Python.valueToCode(
+      block,
+      "VALUE",
+      Blockly.Python.ORDER_FUNCTION_CALL
+    ) || "";
+  var type = block.getFieldValue("TYPE");
+  var arrayValue = value.replaceAll("'", "").split(",");
+
+  if (type === "string") {
+    arrayValue = arrayValue.map((item) => {
+      return `'${item}'`;
+    });
+  } else if (type === "int") {
+    arrayValue = arrayValue.map((item) => {
+      return parseInt(item);
+    });
+  } else if (type === "float") {
+    arrayValue = arrayValue.map((item) => {
+      return parseFloat(item);
+    });
+  }
+
+  var code = `${name.replaceAll("'", "")} = [${arrayValue}]\n`;
   return code;
 };
