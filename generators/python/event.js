@@ -16,14 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
+"use strict";
 
-goog.provide('Blockly.Python.event');
+goog.provide("Blockly.Python.event");
 
-goog.require('Blockly.Python');
+goog.require("Blockly.Python");
 
-
-Blockly.Python['event_whenmicrobitbegin'] = function(block) {
+Blockly.Python["event_whenmicrobitbegin"] = function (block) {
   Blockly.Python.imports_["microbit"] = "from microbit import *";
 
   var code = "";
@@ -35,22 +34,40 @@ Blockly.Python['event_whenmicrobitbegin'] = function(block) {
   return code;
 };
 
-Blockly.Python['event_whenmicrobitbuttonpressed'] = function(block) {
+Blockly.Python["event_whenmicrobitbuttonpressed"] = function (block) {
   Blockly.Python.imports_["microbit"] = "from microbit import *";
 
-  var key = block.getFieldValue('KEY_OPTION');
+  var key = block.getFieldValue("KEY_OPTION");
 
-  var i = '';
+  var i = "";
   while (Blockly.Python.loops_["event_whenmicrobitbegin" + key + i]) {
-    if (i === '') {
+    if (i === "") {
       i = 1;
     } else {
       i++;
     }
   }
-
-  Blockly.Python.loops_["event_whenmicrobitbegin" + key + i] = "if button_" + key + ".is_pressed():\n" +
-    Blockly.Python.INDENT + Blockly.Python.INDENT + "on_button_" + key + i + "()";
+  if (key != "ab") {
+    Blockly.Python.loops_["event_whenmicrobitbegin" + key + i] =
+      "if button_" +
+      key +
+      ".is_pressed():\n" +
+      Blockly.Python.INDENT +
+      Blockly.Python.INDENT +
+      "on_button_" +
+      key +
+      i +
+      "()";
+  } else {
+    Blockly.Python.loops_["event_whenmicrobitbegin" + key + i] =
+      "if button_a.is_pressed() and button_b.is_pressed():\n" +
+      Blockly.Python.INDENT +
+      Blockly.Python.INDENT +
+      "on_button_" +
+      key +
+      i +
+      "()";
+  }
 
   var code = "def on_button_" + key + i + "():\n";
 
@@ -60,10 +77,16 @@ Blockly.Python['event_whenmicrobitbuttonpressed'] = function(block) {
   } else {
     var variablesName = [];
     for (var x in Blockly.Python.variables_) {
-      variablesName.push(Blockly.Python.variables_[x].slice(0, Blockly.Python.variables_[x].indexOf('=') - 1));
+      variablesName.push(
+        Blockly.Python.variables_[x].slice(
+          0,
+          Blockly.Python.variables_[x].indexOf("=") - 1
+        )
+      );
     }
     if (variablesName.length !== 0) {
-      code += Blockly.Python.INDENT + "global " + variablesName.join(', ') + "\n";
+      code +=
+        Blockly.Python.INDENT + "global " + variablesName.join(", ") + "\n";
     }
 
     code = Blockly.Python.scrub_(block, code);
@@ -73,22 +96,30 @@ Blockly.Python['event_whenmicrobitbuttonpressed'] = function(block) {
   return null;
 };
 
-Blockly.Python['event_whenmicrobitpinbeingtouched'] = function(block) {
+Blockly.Python["event_whenmicrobitpinbeingtouched"] = function (block) {
   Blockly.Python.imports_["microbit"] = "from microbit import *";
 
-  var pin = block.getFieldValue('PIN_OPTION');
+  var pin = block.getFieldValue("PIN_OPTION");
 
-  var i = '';
+  var i = "";
   while (Blockly.Python.loops_["event_whenmicrobitpinbeingtouched" + pin + i]) {
-    if (i === '') {
+    if (i === "") {
       i = 1;
     } else {
       i++;
     }
   }
 
-  Blockly.Python.loops_["event_whenmicrobitpinbeingtouched" + pin + i] = "if pin" + pin + ".is_pressed():\n" +
-    Blockly.Python.INDENT + Blockly.Python.INDENT + "on_pin" + pin + i + "()";
+  Blockly.Python.loops_["event_whenmicrobitpinbeingtouched" + pin + i] =
+    "if pin" +
+    pin +
+    ".is_pressed():\n" +
+    Blockly.Python.INDENT +
+    Blockly.Python.INDENT +
+    "on_pin" +
+    pin +
+    i +
+    "()";
 
   var code = "def on_pin" + pin + i + "():\n";
   var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
@@ -97,10 +128,16 @@ Blockly.Python['event_whenmicrobitpinbeingtouched'] = function(block) {
   } else {
     var variablesName = [];
     for (var x in Blockly.Python.variables_) {
-      variablesName.push(Blockly.Python.variables_[x].slice(0, Blockly.Python.variables_[x].indexOf('=') - 1));
+      variablesName.push(
+        Blockly.Python.variables_[x].slice(
+          0,
+          Blockly.Python.variables_[x].indexOf("=") - 1
+        )
+      );
     }
     if (variablesName.length !== 0) {
-      code += Blockly.Python.INDENT + "global " + variablesName.join(', ') + "\n";
+      code +=
+        Blockly.Python.INDENT + "global " + variablesName.join(", ") + "\n";
     }
 
     code = Blockly.Python.scrub_(block, code);
@@ -110,22 +147,30 @@ Blockly.Python['event_whenmicrobitpinbeingtouched'] = function(block) {
   return null;
 };
 
-Blockly.Python['event_whenmicrobitgesture'] = function(block) {
+Blockly.Python["event_whenmicrobitgesture"] = function (block) {
   Blockly.Python.imports_["microbit"] = "from microbit import *";
 
-  var sta = block.getFieldValue('GESTURE_OPTION');
+  var sta = block.getFieldValue("GESTURE_OPTION");
 
-  var i = '';
+  var i = "";
   while (Blockly.Python.loops_["event_whenmicrobitgesture" + sta + i]) {
-    if (i === '') {
+    if (i === "") {
       i = 1;
     } else {
       i++;
     }
   }
 
-  Blockly.Python.loops_["event_whenmicrobitgesture" + sta + i] = "if accelerometer.was_gesture('" + sta + "'):\n" +
-    Blockly.Python.INDENT + Blockly.Python.INDENT + "on_" + sta + i + "()";
+  Blockly.Python.loops_["event_whenmicrobitgesture" + sta + i] =
+    "if accelerometer.was_gesture('" +
+    sta +
+    "'):\n" +
+    Blockly.Python.INDENT +
+    Blockly.Python.INDENT +
+    "on_" +
+    sta +
+    i +
+    "()";
 
   var code = "def on_" + sta + i + "():\n";
   var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
@@ -134,10 +179,16 @@ Blockly.Python['event_whenmicrobitgesture'] = function(block) {
   } else {
     var variablesName = [];
     for (var x in Blockly.Python.variables_) {
-      variablesName.push(Blockly.Python.variables_[x].slice(0, Blockly.Python.variables_[x].indexOf('=') - 1));
+      variablesName.push(
+        Blockly.Python.variables_[x].slice(
+          0,
+          Blockly.Python.variables_[x].indexOf("=") - 1
+        )
+      );
     }
     if (variablesName.length !== 0) {
-      code += Blockly.Python.INDENT + "global " + variablesName.join(', ') + "\n";
+      code +=
+        Blockly.Python.INDENT + "global " + variablesName.join(", ") + "\n";
     }
 
     code = Blockly.Python.scrub_(block, code);

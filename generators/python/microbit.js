@@ -135,7 +135,7 @@ Blockly.Python["microbit_display_show"] = function (block) {
       "TEXT",
       Blockly.Python.ORDER_FUNCTION_CALL
     ) || "";
-  var code = "display.scroll(str(" + arg0 + "), wait=False, loop=False)\n";
+  var code = "display.show(" + arg0 + ")\n";
   return code;
 };
 
@@ -146,7 +146,7 @@ Blockly.Python["microbit_display_showUntilScrollDone"] = function (block) {
       "TEXT",
       Blockly.Python.ORDER_FUNCTION_CALL
     ) || "";
-  var code = "display.scroll(str(" + arg0 + "), wait=True, loop=False)\n";
+  var code = "display.scroll(" + arg0 + ", wait=True, loop=False)\n";
   return code;
 };
 
@@ -359,7 +359,7 @@ Blockly.Python["microbit_music_setVolume"] = function (block) {
       "VOL",
       Blockly.Python.ORDER_FUNCTION_CALL
     ) || "";
-  var code = "music.set_volume(" + volume + ")\n";
+  var code = "set_volume(" + volume + ")\n";
   return code;
 };
 
@@ -371,7 +371,7 @@ Blockly.Python["microbit_music_setTempo"] = function (block) {
       "TEMPO",
       Blockly.Python.ORDER_FUNCTION_CALL
     ) || "";
-  var code = "music.tempo(bpm=" + tempo + ")\n";
+  var code = "music.set_tempo(bpm=" + tempo + ")\n";
   return code;
 };
 
