@@ -415,3 +415,112 @@ Blockly.Python["microbit_array_setArray"] = function (block) {
   var code = `${name.replaceAll("'", "")} = [${arrayValue}]\n`;
   return code;
 };
+
+Blockly.Python["microbit_led_plot"] = function (block) {
+  var x =
+    Blockly.Python.valueToCode(
+      block,
+      "X",
+      Blockly.Python.ORDER_FUNCTION_CALL
+    ) || "";
+  var y =
+    Blockly.Python.valueToCode(
+      block,
+      "Y",
+      Blockly.Python.ORDER_FUNCTION_CALL
+    ) || "";
+  var code = `display.set_pixel(${x}, ${y}, 9)\n`;
+  return code;
+};
+
+Blockly.Python["microbit_led_unplot"] = function (block) {
+  var x =
+    Blockly.Python.valueToCode(
+      block,
+      "X",
+      Blockly.Python.ORDER_FUNCTION_CALL
+    ) || "";
+  var y =
+    Blockly.Python.valueToCode(
+      block,
+      "Y",
+      Blockly.Python.ORDER_FUNCTION_CALL
+    ) || "";
+  var code = `display.set_pixel(${x}, ${y}, 0)\n`;
+  return code;
+};
+
+Blockly.Python["microbit_led_getPixel"] = function (block) {
+  var x =
+    Blockly.Python.valueToCode(
+      block,
+      "X",
+      Blockly.Python.ORDER_FUNCTION_CALL
+    ) || "";
+  var y =
+    Blockly.Python.valueToCode(
+      block,
+      "Y",
+      Blockly.Python.ORDER_FUNCTION_CALL
+    ) || "";
+  var code = `display.get_pixel(${x}, ${y})`;
+  return [code, Blockly.Python.ORDER_ATOMIC];
+};
+
+Blockly.Python["microbit_led_plotBarGraph"] = function (block) {
+  var x =
+    Blockly.Python.valueToCode(
+      block,
+      "X",
+      Blockly.Python.ORDER_FUNCTION_CALL
+    ) || "";
+  var y =
+    Blockly.Python.valueToCode(
+      block,
+      "Y",
+      Blockly.Python.ORDER_FUNCTION_CALL
+    ) || "";
+
+  var serial = block.getFieldValue("SERIAL");
+
+  Blockly.Python.customFunctions_["plotBarGraph"] = `
+bar_graph_high = 0\n
+bar_graph_high_last = 0\n\n
+def plot_bar_graph(value, high=0, value_to_console=True):
+
+  global bar_graph_high
+  global bar_graph_high_last
+
+  now = running_time()
+
+  if value_to_console:
+      print(value)
+
+  if high > 0:
+      bar_graph_high = high
+  elif value > bar_graph_high or now - bar_graph_high_last > 10000:
+      bar_graph_high = value
+      bar_graph_high_last = now
+
+
+  if bar_graph_high < 16 * 2.220446049250313e-16:
+      bar_graph_high = 1
+
+
+  v = value / bar_graph_high
+  dv = 1 / 16
+  k = 0
+
+  for y in range(4, -1, -1):
+      for x in range(3):
+          if k > v:
+              display.set_pixel(2 - x, y, 0)
+              display.set_pixel(2 + x, y, 0)
+          else:
+              display.set_pixel(2 - x, y, 9)
+              display.set_pixel(2 + x, y, 9)
+          k += dv\n`;
+
+  var code = `plot_bar_graph(${x}, ${y}, ${serial})\n`;
+  return code;
+};
